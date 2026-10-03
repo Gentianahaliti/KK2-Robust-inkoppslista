@@ -34,3 +34,36 @@ När en klammer saknas blir filen syntaktiskt trasig och programmet kan inte byg
 Lösning:  
 Jag lade tillbaka den saknade } längst ned i filen så att klassen avslutas korrekt.
 Efter det kompilerade programmet igen utan fel och kunde köras som vanligt — booooot.
+
+Fel 4 – Programmet gav ingen feedback när en sökning misslyckades
+Vad hände:  
+När jag sökte efter en vara som inte fanns i listan visade programmet ingenting. Det såg ut som att inget hände och det blev otydligt om sökningen fungerade eller inte.
+
+Varför:  
+Metoden Find() returnerar null när varan inte hittas.
+Programmet skrev ut resultatet direkt med Console.WriteLine(found), och när värdet var null blev utskriften tom.
+
+Lösning:  
+Jag lade till en kontroll som visar ett felmeddelande när Find() returnerar null.
+Om varan hittas skrivs den ut som vanligt.
+
+Fel 5 – Programmet kraschar när man skriver text i menyn
+Vad hände:
+När jag skrev text i menyn (t.ex. “clear”) istället för ett nummer kastade programmet ett FormatException och avslutades direkt.
+
+Varför:
+Koden använde int.Parse för att läsa menyvalet. Parse kräver att inmatningen är ett heltal, annars kastas ett undantag.
+
+Lösning:
+Jag ersatte int.Parse med int.TryParse. Om användaren skriver något som inte är ett nummer visas ett felmeddelande och menyn fortsätter utan att krascha.
+
+Fel 5 – Programmet kraschar när man skriver text i menyn
+Vad hände:  
+När jag skrev text i menyn (t.ex. “clear”) istället för ett nummer kastade programmet ett FormatException och avslutades direkt.
+
+Varför:  
+Koden använde int.Parse för att läsa menyvalet. Parse kräver att inmatningen är ett heltal, annars kastas ett undantag och programmet kraschar.
+
+Lösning:  
+Jag ersatte int.Parse med int.TryParse.
+Om användaren skriver något som inte är ett nummer visas ett felmeddelande och menyn fortsätter utan att krascha.
