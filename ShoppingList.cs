@@ -46,8 +46,6 @@ class ShoppingList
     {
         int sum = 0;
 
-        // FEL: i = 1 hoppar över första varan
-        // RÄTT: i = 0
         for (int i = 0; i < items.Count; i++)
         {
             sum += items[i].Price;
@@ -80,7 +78,7 @@ class ShoppingList
         Console.WriteLine($"Totalt: {Total()} kr");
     }
 
-    // Writes one item per line, as "price;name".
+    // Writes one item per line, as "name;price".
     public void Save()
     {
         try
