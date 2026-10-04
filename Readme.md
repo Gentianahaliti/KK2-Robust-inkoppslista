@@ -1,4 +1,7 @@
-# Kunskapskontroll 2: Robust inköpslista
+![Logotyp för Robust Inköpslista](logo.png)
+
+# Kunskapskontroll 2 – Robust inköpslista
+Detta är min lösning på Kunskapskontroll 2 där jag bygger en robust inköpslista i C#.
 
 ## Del 1 – Felrapport
 
@@ -18,28 +21,7 @@ Inköpslistans budgettak är 1 000 kr. `ShoppingList.Add()` kastar `InvalidOpera
 Sparning och inläsning hanterar specifika filundantag och meddelar användaren om filen inte kan nås. Programmet meddelar inte att sparningen lyckades när skrivningen misslyckas.
 
 ## Klassdiagram
-
-```text
-+---------------------------+
-| Program                   |
-| meny, inmatning och       |
-| felmeddelanden            |
-+-------------+-------------+
-              | använder
-              v
-+---------------------------+
-| ShoppingList              |
-| Add, RemoveAt, Find,      |
-| Total, Print, Save, Load  |
-+-------------+-------------+
-              | innehåller
-              v
-+---------------------------+
-| Item                      |
-| Name, Price               |
-| kontrollerar namn och pris|
-+---------------------------+
-```
+![UML-diagram för Robust Inköpslista](uml.png)
 
 ## Kontrollista
 
