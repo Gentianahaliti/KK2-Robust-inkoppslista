@@ -81,9 +81,16 @@ class ShoppingList
     // Writes one item per line, as "name;price".
     public void Save()
     {
+        List<string> lines = new List<string>();
+
+        foreach (Item item in items)
+        {
+            lines.Add($"{item.Name};{item.Price}");
+        }
+
         try
         {
-            File.WriteAllLines(path, items.Select(i => $"{i.Name};{i.Price}"));
+            File.WriteAllLines(path, lines);
             Console.WriteLine("Listan sparades.");
         }
         catch (IOException ex)
@@ -104,19 +111,9 @@ class ShoppingList
         {
             lines = File.ReadAllLines(path);
         }
-        catch (FileNotFoundException)
-        {
-            Console.WriteLine("Ingen sparad lista hittades. En ny lista startas.");
-            return;
-        }
-        catch (DirectoryNotFoundException)
-        {
-            Console.WriteLine($"Kunde inte läsa filen: sökvägen '{path}' finns inte.");
-            return;
-        }
         catch (IOException ex)
         {
-            Console.WriteLine($"Kunde inte läsa filen: {ex.Message}");
+            Console.WriteLine($"Kunde inte läsa en sparad lista ({ex.Message}). Programmet startar med en tom lista.");
             return;
         }
         catch (UnauthorizedAccessException ex)

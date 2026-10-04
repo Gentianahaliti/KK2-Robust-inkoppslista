@@ -51,10 +51,6 @@ while (true)
         {
             list.Add(new Item(name, price));
         }
-        catch (ArgumentOutOfRangeException ex)
-        {
-            Console.WriteLine($"Fel: {ex.Message}");
-        }
         catch (ArgumentException ex)
         {
             Console.WriteLine($"Fel: {ex.Message}");
