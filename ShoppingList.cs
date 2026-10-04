@@ -99,13 +99,20 @@ class ShoppingList
     // Reads the file back into the list.
     public void Load()
     {
-        if (!File.Exists(path))
-            return;
-
         string[] lines;
         try
         {
             lines = File.ReadAllLines(path);
+        }
+        catch (FileNotFoundException)
+        {
+            Console.WriteLine("Ingen sparad lista hittades. En ny lista startas.");
+            return;
+        }
+        catch (DirectoryNotFoundException)
+        {
+            Console.WriteLine($"Kunde inte läsa filen: sökvägen '{path}' finns inte.");
+            return;
         }
         catch (IOException ex)
         {

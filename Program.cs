@@ -13,7 +13,13 @@ while (true)
     Console.WriteLine("5. Avsluta");
     Console.Write("Välj: ");
 
-    if (!int.TryParse(Console.ReadLine(), out int choice))
+    string choiceText = Console.ReadLine();
+    if (choiceText == null)
+    {
+        break;
+    }
+
+    if (!int.TryParse(choiceText, out int choice))
     {
         Console.WriteLine("Du måste skriva ett nummer.");
         continue;
@@ -23,9 +29,18 @@ while (true)
     {
         Console.Write("Ange namn: ");
         string name = Console.ReadLine();
+        if (name == null)
+        {
+            break;
+        }
 
         Console.Write("Pris: ");
         string priceText = Console.ReadLine();
+        if (priceText == null)
+        {
+            break;
+        }
+
         if (!int.TryParse(priceText, out int price))
         {
             Console.WriteLine("Du måste skriva ett nummer.");
@@ -52,7 +67,13 @@ while (true)
     else if (choice == 2)
     {
         Console.Write("Nummer: ");
-        if (!int.TryParse(Console.ReadLine(), out int number))
+        string numberText = Console.ReadLine();
+        if (numberText == null)
+        {
+            break;
+        }
+
+        if (!int.TryParse(numberText, out int number))
         {
             Console.WriteLine("Du måste skriva ett nummer.");
             continue;
@@ -67,6 +88,11 @@ while (true)
     {
         Console.Write("Namn att söka efter: ");
         string wanted = Console.ReadLine();
+        if (wanted == null)
+        {
+            break;
+        }
+
         Item found = list.Find(wanted);
 
         if (found == null)
