@@ -26,6 +26,12 @@ class ShoppingList
     // Removes the item the user sees as number 1, 2, 3 ...
     public void RemoveAt(int number)
     {
+        if (number < 1 || number > items.Count)
+        {
+            Console.WriteLine("Fel: det finns ingen vara med det numret.");
+            return;
+        }
+
         items.RemoveAt(number - 1);
     }
 
@@ -71,22 +77,15 @@ class ShoppingList
     // Writes one item per line, as "price;name".
     public void Save()
     {
-        List<string> lines = new List<string>();
-
-        foreach (Item item in items)
-        {
-            lines.Add($"{item.Price};{item.Name}");
-        }
-
         try
         {
-            File.WriteAllText(path, string.Join("\r\n", lines) + "\r\n");
+            File.WriteAllLines(path, items.Select(i => $"{i.Name};{i.Price}"));
+            Console.WriteLine("Listan sparades.");
         }
-        catch
+        catch (Exception ex)
         {
+            Console.WriteLine($"Kunde inte spara filen: {ex.Message}");
         }
-
-        Console.WriteLine("Listan är sparad.");
     }
 
     // Reads the file back into the list.
@@ -97,6 +96,12 @@ class ShoppingList
             return;
 
        string[] lines = File.ReadAllLines(path);
+
+        if (lines.Length == 0)
+        {
+            Console.WriteLine("Filen är tom. Ingen data att läsa.");
+            return;
+        }
 
         foreach (string line in lines)
         {
