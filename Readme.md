@@ -1,121 +1,49 @@
+# Kunskapskontroll 2: Robust inköpslista
 
-Kunskapskontroll 2: Robust inköpslista
+## Del 1 – Felrapport
 
-Del A – Felsökning och åtgärder
+1. **Text i menyn kunde krascha programmet.** Menyvalet parsades som ett heltal utan säker kontroll. `int.TryParse` används nu och användaren får ett felmeddelande.
+2. **Text i priset kunde krascha programmet.** Priset parsades utan att hantera ogiltig inmatning. `int.TryParse` används nu, så programmet fortsätter om priset inte är ett heltal.
+3. **Ett nummer som inte fanns kunde krascha borttagningen.** Numret användes som listindex utan gränskontroll. Programmet kontrollerar nu att numret är giltigt innan borttagning.
+4. **Totalsumman blev fel.** Summeringen började på index 1 och missade därmed den första varan. Den börjar nu på index 0.
+5. **En misslyckad sökning gav ingen tydlig återkoppling.** `Find()` returnerar `null` när varan saknas. `Program` kontrollerar resultatet och visar ett meddelande; sökningen jämför också namn utan att skilja på stora och små bokstäver.
+6. **Varor lästes inte tillbaka korrekt och filfel kunde störa inläsningen.** Spara och läsa använde olika ordning på namn och pris. Formatet är nu `namn;pris` på båda ställena. Saknad fil hanteras, och tomma eller felaktiga rader hoppas över.
 
-Fel 1 – Programmet kraschar när priset inte är ett tal
-Vad hände:  
-När jag la till en vara och skrev text i prisfältet (t.ex. “bröd”) istället för ett nummer kraschade programmet med ett FormatException.
+## Del 2 – Robusthet och designval
 
-Varför:  
-Koden använde int.Parse, som kräver att inmatningen är ett heltal.
+`Item` avvisar ett tomt namn med `ArgumentException` och ett negativt pris med `ArgumentOutOfRangeException`. Programmet fångar dessa undantag, visar ett begripligt meddelande och fortsätter till nästa menyvarv.
 
-Lösning:  
-Jag ersatte int.Parse med int.TryParse.
-Nu visas ett felmeddelande och programmet fortsätter utan att krascha.
+Inköpslistans budgettak är 1 000 kr. `ShoppingList.Add()` kastar `InvalidOperationException` om varan skulle överskrida taket. Jag valde ett undantag eftersom det innebär att operationen inte kan genomföras; då kan anroparen fånga det och visa varför varan inte lades till. Listans aktuella summa kontrolleras innan varan läggs till.
 
-Fel 2 – Programmet kraschar när man försöker ta bort ett nummer som inte finns
-Vad hände:  
-När jag skrev ett nummer som inte fanns i listan (t.ex. 999) kastades ett ArgumentOutOfRangeException.
+Sparning och inläsning hanterar specifika filundantag och meddelar användaren om filen inte kan nås. Programmet meddelar inte att sparningen lyckades när skrivningen misslyckas.
 
-Varför:  
-RemoveAt(number) användes utan kontroll av om numret var giltigt.
-Dessutom användes int.Parse för menyvalet.
+## Klassdiagram
 
-Lösning:  
-Jag bytte till int.TryParse och lade till en kontroll som ser till att numret är mellan 1 och listans sista index.
+```text
++---------------------------+
+| Program                   |
+| meny, inmatning och       |
+| felmeddelanden            |
++-------------+-------------+
+              | använder
+              v
++---------------------------+
+| ShoppingList              |
+| Add, RemoveAt, Find,      |
+| Total, Print, Save, Load  |
++-------------+-------------+
+              | innehåller
+              v
++---------------------------+
+| Item                      |
+| Name, Price               |
+| validerar sina värden     |
++---------------------------+
+```
 
-Fel 3 – Programmet kompilerade inte eftersom en klammerparentes saknades
-Vad hände:  
-Efter en ändring i Load() saknades en avslutande } längst ner i filen.
+## Kontrollista
 
-Varför:  
-C# kräver att varje { har en matchande }.
-
-Lösning:  
-Jag lade tillbaka den saknade klammern.
-Programmet kompilerade igen utan fel.
-
-Fel 4 – Programmet gav ingen feedback när en sökning misslyckades
-Vad hände:  
-När jag sökte efter en vara som inte fanns visades ingenting.
-
-Varför:  
-Find() returnerar null när varan inte hittas, och utskriften blev tom.
-
-Lösning:  
-Jag lade till en kontroll som visar ett felmeddelande när Find() returnerar null.
-
-Fel 5 – Programmet kraschar när man skriver text i menyn
-Vad hände:  
-När jag skrev text (t.ex. “clear”) istället för ett nummer kastades ett FormatException.
-
-Varför:  
-Menyn använde int.Parse.
-
-Lösning:  
-Jag ersatte int.Parse med int.TryParse.
-Nu visas ett felmeddelande och menyn fortsätter.
-
-Fel 6 – Programmet laddade inte filen korrekt
-Vad hände:  
-När jag sparade och startade om programmet laddades listan fel. Namnen försvann och bara priser visades.
-
-Varför:  
-Filen lästes inte rad för rad, och det saknades kontroller för tomma och felaktiga rader.
-
-Lösning:  
-Jag bytte till File.ReadAllLines(path) och lade till kontroller för tomma och felaktiga rader.
-Jag använde int.TryParse för priset.
-Nu laddas filen korrekt.
-
-Del B – Robusthet och förbättringar
-I Del B har jag gjort programmet mer robust så att det klarar fel utan att krascha.
-
-Tomt namn
-Stoppar användaren från att lägga till en vara utan namn.
-
-Negativt pris
-Stoppar negativa priser.
-
-Dubbletter
-Stoppar varor som redan finns i listan (case‑insensitive).
-Trasiga rader i filen
-Hoppar över rader som saknar semikolon, saknar pris eller inte går att tolka.
-
-Tom fil
-Visar ett lugnt meddelande och fortsätter.
-
-Felhantering i Save()
-try/catch runt filskrivningen.
-Visar felmeddelande om filen är låst.
-
-Robust RemoveAt()
-Stoppar felaktiga nummer vid borttagning.
-
-Del C – Testning
-Jag har testat alla robusthetsfunktioner för att se att programmet beter sig korrekt.
-
-Test av tomt namn
-Programmet stoppar tomma namn.
-
-Test av negativt pris
-Programmet stoppar negativa priser.
-
-Test av dubbletter
-Programmet hindrar att samma vara läggs till flera gånger.
-
-Test av trasiga rader
-Programmet hoppar över felaktiga rader.
-
-Test av tom fil
-Programmet visar att filen är tom.
-
-Test av Save() när filen är låst
-Programmet visar felmeddelande och kraschar inte.
-
-Test av RemoveAt() med fel nummer
-Programmet stoppar felaktiga nummer.
-
-Slutsats
-Jag har gjort inköpslistan robust genom att lägga till kontroller för felaktig inmatning, trasiga filer och fel vid sparning. Programmet klarar nu alla vanliga fel som kan uppstå och fortsätter köra utan att krascha. Jag har testat alla delar och sett att programmet beter sig korrekt.
+- `dotnet build` lyckades utan fel.
+- Programmet startades och avslutades via menyvalet.
+- Källkoden använder `TryParse` för menyval, pris och borttagningsnummer.
+- `.gitignore` ignorerar `bin/` och `obj/`.
