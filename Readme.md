@@ -1,9 +1,10 @@
 #Fel 1 – Programmet kraschar när priset inte är ett tal
 ##Vad hände:  
-När jag lade till en vara och skrev text i prisfältet (t.ex. “bröd” istället för ett nummer) så kraschade programmet direkt med ett FormatException‑fel.
+När jag la till en vara och skrev text i prisfältet t.ex. “bröd” istället för ett nummer så kraschade programmet direkt med ett (FormatException‑fel)
 
 ##Varför:  
-Koden använde int.Parse för att läsa priset. Parse kräver att inmatningen är ett heltal, annars kastas ett undantag och programmet avslutas.
+Koden använde int.Parse för att läsa priset. Parse kräver att inmatningen är ett heltal 
+annars kastas ett undantag och programmet avslutas.
 
 ##Lösning:  
 Jag tog bort int.Parse och ersatte det med int.TryParse.

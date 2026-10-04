@@ -22,8 +22,14 @@ while (true)
 
     if (choice == 1)
     {
-        Console.Write("Namn: ");
+        Console.Write("Ange namn: ");
         string name = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            Console.WriteLine("Fel: Du måste skriva ett namn.");
+            return;
+        }
+
         Console.Write("Pris: ");
         string priceText = Console.ReadLine();
         if (!int.TryParse(priceText, out int price))
