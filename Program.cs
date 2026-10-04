@@ -13,7 +13,6 @@ while (true)
     Console.WriteLine("5. Avsluta");
     Console.Write("Välj: ");
 
-    // ENDA ÄNDRINGEN 
     if (!int.TryParse(Console.ReadLine(), out int choice))
     {
         Console.WriteLine("Du måste skriva ett nummer.");
@@ -24,11 +23,6 @@ while (true)
     {
         Console.Write("Ange namn: ");
         string name = Console.ReadLine();
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            Console.WriteLine("Fel: Du måste skriva ett namn.");
-            return;
-        }
 
         Console.Write("Pris: ");
         string priceText = Console.ReadLine();
@@ -37,13 +31,23 @@ while (true)
             Console.WriteLine("Du måste skriva ett nummer.");
             continue;
         }
-        if (price < 0)
-        {
-            Console.WriteLine("Fel: pris måste vara positivt.");
-            return;
-        }
 
-        list.Add(new Item(name, price));
+        try
+        {
+            list.Add(new Item(name, price));
+        }
+        catch (ArgumentOutOfRangeException ex)
+        {
+            Console.WriteLine($"Fel: {ex.Message}");
+        }
+        catch (ArgumentException ex)
+        {
+            Console.WriteLine($"Fel: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Fel: {ex.Message}");
+        }
     }
     else if (choice == 2)
     {
@@ -77,5 +81,9 @@ while (true)
     else if (choice == 5)
     {
         break;
+    }
+    else
+    {
+        Console.WriteLine("Välj ett nummer mellan 1 och 5.");
     }
 }

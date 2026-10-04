@@ -1,6 +1,7 @@
 // Holds the items and takes care of loading and saving them.
 class ShoppingList
 {
+    private const int BudgetLimit = 1000;
     private List<Item> items = new List<Item>();
     private string path;
 
@@ -11,6 +12,11 @@ class ShoppingList
 
     public void Add(Item item)
     {
+        if (item.Price > BudgetLimit - Total())
+        {
+            throw new InvalidOperationException($"Budgettaket på {BudgetLimit} kr skulle överskridas.");
+        }
+
         foreach (var existingItem in items)
         {
             if (existingItem.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase))
@@ -55,7 +61,7 @@ class ShoppingList
     {
         foreach (Item item in items)
         {
-            if (item.Name == name)
+            if (item.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
             {
                 return item;
             }
@@ -82,7 +88,11 @@ class ShoppingList
             File.WriteAllLines(path, items.Select(i => $"{i.Name};{i.Price}"));
             Console.WriteLine("Listan sparades.");
         }
-        catch (Exception ex)
+        catch (IOException ex)
+        {
+            Console.WriteLine($"Kunde inte spara filen: {ex.Message}");
+        }
+        catch (UnauthorizedAccessException ex)
         {
             Console.WriteLine($"Kunde inte spara filen: {ex.Message}");
         }
@@ -91,11 +101,24 @@ class ShoppingList
     // Reads the file back into the list.
     public void Load()
     {
-        // FEL: kraschar om filen saknas
         if (!File.Exists(path))
             return;
 
-       string[] lines = File.ReadAllLines(path);
+        string[] lines;
+        try
+        {
+            lines = File.ReadAllLines(path);
+        }
+        catch (IOException ex)
+        {
+            Console.WriteLine($"Kunde inte läsa filen: {ex.Message}");
+            return;
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            Console.WriteLine($"Kunde inte läsa filen: {ex.Message}");
+            return;
+        }
 
         if (lines.Length == 0)
         {
@@ -105,21 +128,30 @@ class ShoppingList
 
         foreach (string line in lines)
         {
-            // FEL: kraschar på tom rad
             if (string.IsNullOrWhiteSpace(line))
                 continue;
 
             string[] parts = line.Split(';');
 
-            // FEL: kraschar om rad inte har två delar
             if (parts.Length != 2)
                 continue;
 
-            // FEL: kraschar om pris inte är ett tal
-            if (!int.TryParse(parts[0], out int price))
+            string name = parts[0];
+            if (!int.TryParse(parts[1], out int price))
                 continue;
 
-            items.Add(new Item(parts[1], price));
+            try
+            {
+                Add(new Item(name, price));
+            }
+            catch (ArgumentException)
+            {
+                Console.WriteLine("En ogiltig vara i filen hoppades över.");
+            }
+            catch (InvalidOperationException)
+            {
+                Console.WriteLine($"Budgettaket på {BudgetLimit} kr överskreds av varor i filen. Resterande vara hoppades över.");
+            }
         }
     }
 }
