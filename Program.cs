@@ -37,6 +37,12 @@ while (true)
             Console.WriteLine("Du måste skriva ett nummer.");
             continue;
         }
+        if (price < 0)
+        {
+            Console.WriteLine("Fel: pris måste vara positivt.");
+            return;
+        }
+
         list.Add(new Item(name, price));
     }
     else if (choice == 2)
