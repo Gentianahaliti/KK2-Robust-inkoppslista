@@ -11,6 +11,15 @@ class ShoppingList
 
     public void Add(Item item)
     {
+        foreach (var existingItem in items)
+        {
+            if (existingItem.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase))
+            {
+                Console.WriteLine("Fel: varan finns redan i listan.");
+                return;
+            }
+        }
+
         items.Add(item);
     }
 
