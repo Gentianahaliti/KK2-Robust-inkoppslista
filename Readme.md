@@ -2,12 +2,12 @@
 
 ## Del 1 – Felrapport
 
-1. **Text i menyn kunde krascha programmet.** Menyvalet parsades som ett heltal utan säker kontroll. `int.TryParse` används nu och användaren får ett felmeddelande.
-2. **Text i priset kunde krascha programmet.** Priset parsades utan att hantera ogiltig inmatning. `int.TryParse` används nu, så programmet fortsätter om priset inte är ett heltal.
-3. **Ett nummer som inte fanns kunde krascha borttagningen.** Numret användes som listindex utan gränskontroll. Programmet kontrollerar nu att numret är giltigt innan borttagning.
-4. **Totalsumman blev fel.** Summeringen började på index 1 och missade därmed den första varan. Den börjar nu på index 0.
-5. **En misslyckad sökning gav ingen tydlig återkoppling.** `Find()` returnerar `null` när varan saknas. `Program` kontrollerar resultatet och visar ett meddelande; sökningen jämför också namn utan att skilja på stora och små bokstäver.
-6. **Varor lästes inte tillbaka korrekt och filfel kunde störa inläsningen.** Spara och läsa använde olika ordning på namn och pris. Formatet är nu `namn;pris` på båda ställena. Saknad fil hanteras, och tomma eller felaktiga rader hoppas över.
+1. **Text i menyn kunde krascha programmet.** Menyvalet lästes med `int.Parse`. Text i stället för ett tal gav `FormatException`. Jag använder `int.TryParse` och visar ett meddelande.
+2. **Text i priset kunde krascha programmet.** Priset lästes också med `int.Parse`, vilket gav `FormatException` för text. Jag använder `int.TryParse`.
+3. **Fel nummer vid borttagning kunde krascha programmet.** `int.Parse` kunde krascha på text och `RemoveAt` kunde krascha om numret inte fanns. Jag använder `int.TryParse` och kontrollerar numrets gränser.
+4. **Programmet kunde krascha när listfilen saknades eller innehöll en tom eller felaktig rad.** `Load()` läste filen utan att hantera filfel och använde delar av en rad utan att först kontrollera att de fanns. Jag kontrollerar filen, raderna och priset innan varan läggs till.
+5. **Totalsumman blev fel.** Summeringen började på index 1 och missade den första varan. Den börjar nu på index 0.
+6. **Ett sparfel doldes.** `Save()` hade en tom `catch` och skrev sedan ändå att listan sparats. Jag fångar specifika filfel och visar ett felmeddelande i stället för att säga att sparningen lyckades.
 
 ## Del 2 – Robusthet och designval
 
@@ -37,7 +37,7 @@ Sparning och inläsning hanterar specifika filundantag och meddelar användaren 
 +---------------------------+
 | Item                      |
 | Name, Price               |
-| validerar sina värden     |
+| kontrollerar namn och pris|
 +---------------------------+
 ```
 
