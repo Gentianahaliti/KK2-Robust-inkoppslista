@@ -72,50 +72,49 @@ Nu laddas filen korrekt.
 Del B – Robusthet och förbättringar
 I Del B har jag gjort programmet mer robust så att det klarar fel utan att krascha.
 
-✔ Tomt namn
+Tomt namn
 Stoppar användaren från att lägga till en vara utan namn.
 
-✔ Negativt pris
+Negativt pris
 Stoppar negativa priser.
 
-✔ Dubbletter
+Dubbletter
 Stoppar varor som redan finns i listan (case‑insensitive).
-
-✔ Trasiga rader i filen
+Trasiga rader i filen
 Hoppar över rader som saknar semikolon, saknar pris eller inte går att tolka.
 
-✔ Tom fil
+Tom fil
 Visar ett lugnt meddelande och fortsätter.
 
-✔ Felhantering i Save()
+Felhantering i Save()
 try/catch runt filskrivningen.
 Visar felmeddelande om filen är låst.
 
-✔ Robust RemoveAt()
+Robust RemoveAt()
 Stoppar felaktiga nummer vid borttagning.
 
 Del C – Testning
 Jag har testat alla robusthetsfunktioner för att se att programmet beter sig korrekt.
 
-✔ Test av tomt namn
+Test av tomt namn
 Programmet stoppar tomma namn.
 
-✔ Test av negativt pris
+Test av negativt pris
 Programmet stoppar negativa priser.
 
-✔ Test av dubbletter
+Test av dubbletter
 Programmet hindrar att samma vara läggs till flera gånger.
 
-✔ Test av trasiga rader
+Test av trasiga rader
 Programmet hoppar över felaktiga rader.
 
-✔ Test av tom fil
+Test av tom fil
 Programmet visar att filen är tom.
 
-✔ Test av Save() när filen är låst
+Test av Save() när filen är låst
 Programmet visar felmeddelande och kraschar inte.
 
-✔ Test av RemoveAt() med fel nummer
+Test av RemoveAt() med fel nummer
 Programmet stoppar felaktiga nummer.
 
 Slutsats
