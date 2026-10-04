@@ -1,3 +1,6 @@
-15;Mjölk
-32;Bröd
-89;Ost
+15;Mjölk
+32;Bröd
+89;Ost
+20;mjölk
+30;bröd
+50;ost

@@ -13,7 +13,7 @@ while (true)
     Console.WriteLine("5. Avsluta");
     Console.Write("Välj: ");
 
-    // ★★★ ENDA ÄNDRINGEN ★★★
+    // ENDA ÄNDRINGEN 
     if (!int.TryParse(Console.ReadLine(), out int choice))
     {
         Console.WriteLine("Du måste skriva ett nummer.");

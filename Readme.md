@@ -67,3 +67,19 @@ Koden använde int.Parse för att läsa menyvalet. Parse kräver att inmatningen
 Lösning:  
 Jag ersatte int.Parse med int.TryParse.
 Om användaren skriver något som inte är ett nummer visas ett felmeddelande och menyn fortsätter utan att krascha.
+
+Fel 6 – Programmet laddade inte filen korrekt
+Vad hände:  
+När jag sparade varor och startade programmet igen så laddades listan fel.
+Namnen försvann och programmet visade bara priser.
+Filens innehåll blev konstigt och Load() läste inte in varorna som de skulle.
+
+Varför:  
+I Load() försökte programmet dela upp varje rad i två delar (namn och pris), men filen innehöll bara ett värde per rad.
+Det fanns ingen kontroll för att se om raden hade rätt format, och priset lästes med int.Parse, vilket kunde ge fel.
+
+Lösning:  
+Jag lade till kontroller som hoppar över tomma eller felaktiga rader.
+Jag kollade att varje rad verkligen innehåller två delar innan en vara skapas.
+Jag ersatte int.Parse med int.TryParse så att felaktiga rader inte kraschar programmet.
+Efter ändringen laddas filen korrekt och programmet fungerar som det ska.

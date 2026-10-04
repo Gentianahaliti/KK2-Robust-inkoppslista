@@ -87,8 +87,7 @@ class ShoppingList
         if (!File.Exists(path))
             return;
 
-        string text = File.ReadAllText(path);
-        string[] lines = text.Split('\n');
+       string[] lines = File.ReadAllLines(path);
 
         foreach (string line in lines)
         {
