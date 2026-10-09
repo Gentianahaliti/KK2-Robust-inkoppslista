@@ -1,5 +1,3 @@
-![Logotyp för Robust Inköpslista](<Shopping List Logo.png>)
-
 # Kunskapskontroll 2 – Robust inköpslista
 
 ## Del 1 – Felrapport
